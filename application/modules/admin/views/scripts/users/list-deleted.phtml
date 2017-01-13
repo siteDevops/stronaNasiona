@@ -1,0 +1,91 @@
+<div class="container-fluid">
+    <div class="container full-container">
+        <?php if ($this->users): ?>
+            <div class="table-responsive">
+                <table class="table">
+                    <caption>Liczba usuniętych użytkowników: <?php echo count($this->users);?></caption>
+                    <thead>
+                        <tr>
+                            <th>
+                                <a href="<?php echo $this->url(array('controller'=>'users', 'action'=>'list-deleted', 'order'=>'name', 'order_type' => $this->order_type=='asc'?'desc':'asc'))?>">
+                                    Nazwa
+                                </a>
+                            </th>
+                            <th>
+                                <a href="<?php echo $this->url(array('controller'=>'users', 'action'=>'list-deleted', 'order'=>'email', 'order_type' => $this->order_type=='asc'?'desc':'asc'))?>">
+                                    Email
+                                </a>
+                            </th>
+                            <th style="width: 100px">
+                                <a href="<?php echo $this->url(array('controller'=>'users', 'action'=>'list-deleted', 'order'=>'status', 'order_type' => $this->order_type=='asc'?'desc':'asc'))?>">
+                                    Status
+                                </a>
+                            </th>
+                            <th style="width: 130px">
+                                <a href="<?php echo $this->url(array('controller'=>'users', 'action'=>'list-deleted', 'order'=>'type', 'order_type' => $this->order_type=='asc'?'desc':'asc'))?>">
+                                    Typ
+                                </a>
+                            </th>
+                            <th style="width: 130px">
+                                <a href="<?php echo $this->url(array('controller'=>'users', 'action'=>'list-deleted', 'order'=>'date_register', 'order_type' => $this->order_type=='asc'?'desc':'asc'))?>">
+                                    Data rejestracji
+                                </a>
+                            </th>
+                            <th style="width: 130px">
+                                Usunięty przez
+                            </th>
+                            <th>
+                                Powód
+                            </th>
+                            <th style="width: 130px">
+                                <a href="<?php echo $this->url(array('controller'=>'users', 'action'=>'list-deleted', 'order'=>'date_deleted', 'order_type' => $this->order_type=='asc'?'desc':'asc'))?>">
+                                    Data usunięcia
+                                </a>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($this->users as $item): ?>
+                            <tr data-id="<?php echo $item->id ?>">
+                                <td>
+                                    <a class="user-deleted" href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'users', 'action' => 'edit', 'id' => $item->id)) ?>">
+                                        <?php echo $item->first_name.' '.$item->last_name; ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <?php echo $item->email; ?>
+                                </td>
+                                <td>
+                                    <?php echo $item->status; ?>
+                                </td>
+                                <td>
+                                    <?php echo $item->user_type;?>
+                                </td>
+                                <td class="text-center">
+                                    <?php echo $item->date_register;?>
+                                </td>
+                                <td class="text-center">
+                                    <?php if($item->deleted_by == $item->id):?>
+                                    siebie
+                                    <?php else:?>
+                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'users', 'action' => 'edit', 'id' => $item->id)) ?>">
+                                        <?php echo $item->user_deleting_name.' ('.$item->user_deleting_type.')'; ?>
+                                    </a>
+                                    <?php endif;?>
+                                </td>
+                                <td class="text-center">
+                                    <?php echo $item->delete_reason;?>
+                                </td>
+                                <td class="text-center">
+                                    <?php echo $item->date_deleted;?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php else: ?>
+            pusto
+        <?php endif; ?>
+    </div>
+</div>

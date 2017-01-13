@@ -1,0 +1,79 @@
+<form action="#" method="post">
+    <div class="container-fluid">
+        <div class="container left-container">
+            <h1>Dodaj</h1>
+            <div class="form-group">
+                <label for="login">Login</label>
+                <input type="text" class="form-control" id="login" name="login" value="<?php echo $this->login ?>">
+                <span class="text-danger error-message"><?php if (isset($this->errors['login'])) echo $this->errors['login'] ?></span>
+            </div>
+            <div class="form-group">
+                <label for="first_name">Imię</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo $this->first_name ?>">
+                <span class="text-danger error-message"><?php if (isset($this->errors['first_name'])) echo $this->errors['first_name'] ?></span>
+            </div>
+            <div class="form-group">
+                <label for="first_name">Nazwisko</label>
+                <input type="text" class="form-control" id="first_name" name="last_name" value="<?php echo $this->last_name ?>">
+                <span class="text-danger error-message"><?php if (isset($this->errors['last_name'])) echo $this->errors['last_name'] ?></span>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="<?php echo $this->email ?>">
+                <span class="text-danger error-message"><?php if (isset($this->errors['email'])) echo $this->errors['email'] ?></span>
+            </div>
+            <div class="form-group">
+                <label for="phone">Telefon</label>
+                <input type="tel" class="form-control" id="phone" name="phone" value="<?php echo $this->phone ?>">
+                <span class="text-danger error-message"><?php if (isset($this->errors['phone'])) echo $this->errors['phone'] ?></span>
+            </div>
+            <div class="form-group">
+                <label for="password">Hasło</label>
+                <input type="text" class="form-control" id="password" name="password" value="">
+                <span class="text-danger error-message"><?php if (isset($this->errors['password'])) echo $this->errors['password'] ?></span>
+            </div>
+        </div>
+        <aside class="right-panel">
+            <div class="panel-box">
+                <div class="container-fluid text-center">
+                    <input type="submit" value="&plus;&nbsp;<?php echo $this->translate('Add'); ?>" class="btn btn-block btn-success">
+                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'users', 'action' => 'list')); ?>" class="btn btn-block btn-danger">
+                        <?php echo $this->translate('Cancel'); ?>
+                    </a>
+                </div>
+            </div>
+
+            <div class="panel-box">
+                <div class="container-fluid">
+                    <div class="form-group">
+                        <label for="lang">Język</label>
+                        <select class="form-control" name="lang">
+                            <option value="pl" <?php if ($this->lang == 'pl') echo 'selected' ?>>Polski</option>
+                            <option value="en" <?php if ($this->lang == 'en') echo 'selected' ?>>Angielski</option>
+                        </select>
+                        <span class="text-danger error-message"><?php if (isset($this->errors['lang'])) echo $this->errors['lang'] ?></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Płeć</label>
+                        <select class="form-control" name="gender">
+                            <option value="1" <?php if ($this->gender == '1') echo 'selected' ?>>Kobieta</option>
+                            <option value="2" <?php if ($this->gender == '2') echo 'selected' ?>>Mężczyzna</option>
+                        </select>
+                        <span class="text-danger error-message"><?php if (isset($this->errors['gender'])) echo $this->errors['gender'] ?></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Typ</label>
+                        <select class="form-control" name="type">
+                            <?php foreach ($this->user_types as $type): ?>
+                                <option value="<?php echo $type->id ?>" <?php if ($this->type == $type->id) echo 'selected' ?>>
+                                    <?php echo $type->name ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <span class="text-danger error-message"><?php if (isset($this->errors['type'])) echo $this->errors['type'] ?></span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</form>

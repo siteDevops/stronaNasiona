@@ -1,0 +1,122 @@
+nav.navbar.top-nav{
+    background: #35393c;
+    border:none;
+    border-radius: 0px;
+}
+nav.navbar.top-nav .container{
+    width:100%;
+}
+
+.container.menuAdmin{
+    background: rgba(0,0,0,0.3);
+}
+.container.submenu{
+    background: #cecece;
+}
+
+.container.menuAdmin,
+.container.submenu,
+.container.submenu ul.navbar-nav,
+.container.submenu ul.navbar-nav li a,
+.container.menuAdmin ul.navbar-nav,
+.container.menuAdmin ul.navbar-nav li a{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    height: 30px;
+    line-height: 30px;
+}
+
+nav.navbar.top-nav *>a{
+    color:#ffffff !important;
+}
+nav.navbar.top-nav .container.submenu  *>a{
+    color:#000 !important;
+}
+nav.navbar.top-nav li{
+    text-align:center;
+    height: inherit;
+}
+nav.navbar.top-nav li a{
+    text-align:center;
+    transition-duration:.2s
+}
+nav.navbar.top-nav li a:hover,
+nav.navbar.top-nav li.active a{
+    background-color:transparent !important
+}
+nav.navbar.top-nav .container.menuAdmin li.active{
+    background-color:#cecece !important;
+}
+nav.navbar.top-nav .container.submenu li.active{
+    font-weight: bold;
+}
+nav.navbar.top-nav .container.submenu li.active a,
+nav.navbar.top-nav .container.menuAdmin li.active a{
+    color:#111 !important;
+}
+
+.btn, input, select{
+    border-radius: 0px !important;
+}
+table{
+    font-size: 12px;
+}
+
+.container.left-container{
+    width: 70%;
+    max-width: 1024px;
+    margin: 0px;
+    padding-top: 10px;
+    float: left;
+}
+.container.full-container{
+    width: 100%;
+    margin: 0px;
+    padding-top: 10px;
+    float: left;
+}
+.container.left-container{
+    width: 70%;
+    max-width: 1024px;
+    margin: 0px;
+    padding-top: 10px;
+    float: left;
+}
+aside.right-panel{
+    width: 20%;
+    float: right;
+}
+aside.top-panel{
+    width: 100%;
+    float: left;
+}
+aside .panel-box{
+    width: 100%;
+    background: #555;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    float: left;
+    margin: 5px 0px;
+}
+aside .panel-box label{
+    color: #fff;
+}
+tr.sublink td.name{
+    padding-left: 30px;
+}
+a.icon:hover{
+    text-decoration: none;
+}
+#action_for_checked{
+    display: none;
+}
+input.order-nav-item{
+    width: 50px;
+    float: left;
+}
+a.user-deleted{
+    color:#c12e2a;
+}
+a.user-banned{
+    color:#5e5e5e;
+}

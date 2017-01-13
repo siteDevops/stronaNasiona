@@ -1,0 +1,82 @@
+<?php echo $this->doctype() ?>
+<html>
+    <head>
+        <title>Admin ZrobTo</title>
+
+        <meta charset="utf-8">
+        <meta name="application-name" content="SocialZone">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Chrome, Firefox OS and Opera -->
+        <meta name="theme-color" content="#4285f4">
+        <!-- Windows Phone -->
+        <meta name="msapplication-navbutton-color" content="#4285f4">
+        <!-- iOS Safari -->
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="/css/styles.css">
+
+        <link rel="stylesheet" type="text/css" href="/modules/admin/css/style.css">
+
+        <link rel="icon" href="/images/favicon.png" sizes="16x16" type="image/png"/>
+
+        <script src="/js/jquery/jquery-2.1.4.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+
+        <script src="/modules/admin/js/main.js"></script>
+
+    </head>
+    <body>
+        <header id="page-top">
+            <nav class="navbar navbar-default top-nav">
+                <div class="container">
+                    <div class="navbar-header page-scroll">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <a class="navbar-brand" href="#page-top">Admin</a>
+                    </div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="<?php echo $this->url(array('controller'=>'auth','action'=>'logout'))?>">
+                            <?php echo $this->translate('Logout')?>
+                        </a></li>
+                    </ul>
+                </div>
+                <div class="container menuAdmin">
+                    <ul class="nav navbar-nav">
+                        <?php echo $this->AdminMenu()->getMenu();?>
+                    </ul>
+                </div>
+                <?php if($this->AdminMenu()->_is_submenu):?>
+                <div class="container submenu">
+                    <ul class="nav navbar-nav">
+                        <?php echo $this->AdminMenu()->getSubMenu();?>
+                    </ul>
+                </div>
+                <?php endif;?>
+            </nav>
+        </header>
+
+        <section id="site-content">
+            <?php echo $this->layout()->content ?>
+        </section>
+
+        <footer>
+            <div class="footer-above">
+                <div class="container">
+
+                </div>
+            </div>
+
+            <div class="footer-below">
+                <div class="container">
+                    Copyright &copy; rtCoder 2016
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

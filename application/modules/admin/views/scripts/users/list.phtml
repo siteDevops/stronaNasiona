@@ -1,0 +1,153 @@
+<div class="container-fluid">
+    <aside class="top-panel">
+        <div class="panel-box">
+            <div class="btn-group text-center">
+                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'users', 'action' => 'add')); ?>" class="btn btn-success">
+                    <b>&plus;</b>&nbsp;Nowy
+                </a>
+                <button class="btn btn-danger option_for_selected" id="delete_selected" onclick="return confirm('Jesteś pewny?')" disabled>
+                    <i class="fa fa-trash"></i>&nbsp;
+                    Usuń
+                </button>
+                <button class="btn btn-warning option_for_selected" id="block_selected" onclick="return confirm('Jesteś pewny?')" disabled>
+                    <i class="fa fa-ban"></i>&nbsp;
+                    Zablokuj
+                </button>
+            </div>
+        </div>
+    </aside>
+    <div class="container full-container">
+        <?php if ($this->users): ?>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px">
+                                <input type="checkbox" class="select_all">
+                            </th>
+                            <th>
+                                <a href="<?php echo $this->url(array('controller' => 'users', 'action' => 'list', 'order' => 'name', 'order_type' => $this->order_type == 'asc' ? 'desc' : 'asc')) ?>">
+                                    Nazwa
+                                </a>
+                            </th>
+                            <th>
+                                <a href="<?php echo $this->url(array('controller' => 'users', 'action' => 'list', 'order' => 'email', 'order_type' => $this->order_type == 'asc' ? 'desc' : 'asc')) ?>">
+                                    Email
+                                </a>
+                            </th>
+                            <th style="width: 100px">
+                                <a href="<?php echo $this->url(array('controller' => 'users', 'action' => 'list', 'order' => 'status', 'order_type' => $this->order_type == 'asc' ? 'desc' : 'asc')) ?>">
+                                    Status
+                                </a>
+                            </th>
+                            <th style="width: 130px">
+                                <a href="<?php echo $this->url(array('controller' => 'users', 'action' => 'list', 'order' => 'gender', 'order_type' => $this->order_type == 'asc' ? 'desc' : 'asc')) ?>">
+                                    Płeć
+                                </a>
+                            </th>
+                            <th style="width: 130px">
+                                <a href="<?php echo $this->url(array('controller' => 'users', 'action' => 'list', 'order' => 'type', 'order_type' => $this->order_type == 'asc' ? 'desc' : 'asc')) ?>">
+                                    Typ
+                                </a>
+                            </th>
+                            <th style="width: 130px">
+                                <a href="<?php echo $this->url(array('controller' => 'users', 'action' => 'list', 'order' => 'date_register', 'order_type' => $this->order_type == 'asc' ? 'desc' : 'asc')) ?>">
+                                    Data rejestracji
+                                </a>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($this->users as $item): ?>
+                            <tr data-id="<?php echo $item->id ?>">
+                                <th scope="row">
+                                    <input type="checkbox">
+                                </th>
+                                <td>
+                                    <?php
+                                    if ($item->status == 'deleted') {
+                                        $class = 'user-deleted';
+                                    } elseif ($item->status == 'blocked') {
+                                        $class = 'user-banned';
+                                    } else {
+                                        $class = '';
+                                    }
+                                    ?>
+                                    <a class="<?php echo $class ?>" href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'users', 'action' => 'edit', 'id' => $item->id)) ?>">
+                                        <?php echo $item->first_name . ' ' . $item->last_name; ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <?php echo $item->email; ?>
+                                </td>
+                                <td>
+                                    <?php echo $item->status; ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    if (in_array($item->gender, array('1', '2')))
+                                        echo $item->gender == 1 ? $this->translate('Men') : $this->translate('Women');
+                                    else
+                                        echo '-';
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php echo $item->user_type; ?>
+                                </td>
+                                <td class="text-center">
+                                    <?php echo $item->date_register; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php else: ?>
+            pusto
+        <?php endif; ?>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('input.select_all').change(function () {
+            var $this = $(this);
+            $('input:checkbox').each(function () {
+                $(this).prop('checked', $this.is(':checked'));
+            });
+        });
+        $('input:checkbox').change(function () {
+            if ($('input:checkbox:checked').length) {
+                $('.option_for_selected').removeAttr('disabled');
+            } else {
+                $('.option_for_selected').attr('disabled', 'disabled');
+            }
+        });
+
+        $('#delete_selected').click(function () {
+            var reason = prompt('Podaj powód', '');
+            var link = '/admin/users/delete';
+            $('input:checkbox:checked').each(function () {
+                var id = $(this).parents('tr').data('id');
+                if (typeof (id) !== 'undefined') {
+                    link += '/id/' + id;
+                }
+            });
+            link += "/reason/" + reason;
+            window.location.href = link;
+        });
+
+        $('#block_selected').click(function () {
+            var reason = prompt('Podaj powód', '');
+            var link = '/admin/users/block';
+            $('input:checkbox:checked').each(function () {
+                var id = $(this).parents('tr').data('id');
+                if (typeof (id) !== 'undefined') {
+                    link += '/id/' + id;
+                }
+            });
+            link += "/reason/" + reason;
+            window.location.href = link;
+        });
+    });
+</script>

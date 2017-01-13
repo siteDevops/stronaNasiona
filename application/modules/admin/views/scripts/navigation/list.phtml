@@ -1,0 +1,127 @@
+<div class="container-fluid">
+    <div class="container left-container">
+        <div id="action_for_checked">
+            <div class="btn-group">
+                <button class="btn btn-danger" id="delete_selected" onclick="return confirm('Jesteś pewny?')">
+                    <i class="fa fa-trash"></i>&nbsp;
+                    <?php echo $this->translate('Delete'); ?>
+                </button>
+            </div>
+        </div>
+        <?php if ($this->navigation): ?>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px">
+                                <input type="checkbox" class="select_all">
+                            </th>
+                            <th>Name</th>
+                            <th style="width: 100px">Order</th>
+                            <th style="width: 130px">Show in menu</th>
+                            <th style="width: 60px">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($this->navigation as $item): ?>
+                            <?php if ($item->parent_id == 0): ?>
+                                <tr data-id="<?php echo $item->id ?>">
+                                    <th scope="row">
+                                        <input type="checkbox">
+                                    </th>
+                                    <td>
+                                        <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'navigation', 'action' => 'edit', 'id' => $item->id)) ?>">
+                                            <?php echo $item->name; ?>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <?php echo is_null($item->order_list) ? '-' : $item->order_list; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $item->show_in_menu ? '<i class="text-success fa fa-check"></i>' : '<i class="text-danger fa fa-remove"></i>'; ?>
+                                        <a class="icon" href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'navigation', 'action' => 'switch-show-in-menu', 'id' => $item->id)) ?>">
+                                            &nbsp;<i class="text-primary fa fa-refresh"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'navigation', 'action' => 'delete', 'id' => $item->id)) ?>" onclick="return confirm('Jesteś pewny?')">
+                                            <i class="fa fa-trash text-danger"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <?php foreach ($this->navigation2 as $subitem): ?>
+                                    <?php if ($subitem->parent_id == $item->id): ?>
+                                        <tr class="sublink" data-id="<?php echo $subitem->id ?>">
+                                            <th scope="row">
+                                                <input type="checkbox">
+                                            </th>
+                                            <td class="name">
+                                                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'navigation', 'action' => 'edit', 'id' => $subitem->id)) ?>">
+                                                    <?php echo $subitem->name; ?>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <?php echo is_null($subitem->order_list) ? '-' : $subitem->order_list; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $subitem->show_in_menu ? '<i class="text-success fa fa-check"></i>' : '<i class="text-danger fa fa-remove"></i>'; ?>
+                                                <a class="icon" href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'navigation', 'action' => 'switch-show-in-menu', 'id' => $subitem->id)) ?>">
+                                                    &nbsp;<i class="text-primary fa fa-refresh"></i>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'navigation', 'action' => 'delete', 'id' => $subitem->id)) ?>" onclick="return confirm('Jesteś pewny?')">
+                                                    <i class="fa fa-trash text-danger"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php else: ?>
+            pusto
+        <?php endif; ?>
+    </div>
+    <aside class="right-panel">
+        <div class="panel-box">
+            <div class="container-fluid text-center">
+                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'navigation', 'action' => 'add')); ?>" class="btn btn-block btn-success">
+                    <b>&plus;</b>&nbsp;<?php echo $this->translate('Add'); ?>
+                </a>
+            </div>
+        </div>
+    </aside>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('input.select_all').change(function () {
+            var $this = $(this);
+            $('input:checkbox').each(function () {
+                $(this).prop('checked', $this.is(':checked'));
+            });
+        });
+        $('input:checkbox').change(function () {
+            if ($('input:checkbox:checked').length) {
+                $('#action_for_checked').show();
+            } else {
+                $('#action_for_checked').hide();
+            }
+        });
+
+        $('#delete_selected').click(function () {
+            var link = '/admin/navigation/delete';
+            $('input:checkbox:checked').each(function () {
+                var id = $(this).parents('tr').data('id');
+                if (typeof (id) !== 'undefined') {
+                    link += '/id/' +id;
+                }
+            });
+            window.location.href = link;
+        });
+    });
+</script>

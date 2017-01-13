@@ -1,0 +1,31 @@
+<div class="col-xs-12 col-md-8 col-md-offset-2 col-lg-4 col-lg-offset-4">
+    <div class="container-fluid">
+        <form action="/admin/auth/login" method="post">
+            <fieldset>
+                <div class="form-group">
+                    <label for="login">Login/Email</label>
+                    <input type="text" id="login" name="login" class="form-control">
+                    <div class="error-message text-danger">
+                        <?php if(isset($this->errors['login'])) echo $this->errors['login']; ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Hasło</label>
+                    <input type="password" id="password" name="password" class="form-control">
+                    <div class="error-message text-danger">
+                        <?php if(isset($this->errors['password'])) echo $this->errors['password']; ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="hidden" name="back" value="<?php echo $_SERVER['REQUEST_URI']; ?>">
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Zaloguj">
+                </div>
+                <div class="error-message text-danger">
+                    <?php echo $this->error_custom; ?>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
