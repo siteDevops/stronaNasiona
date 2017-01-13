@@ -17,6 +17,7 @@
                                 <input type="checkbox" class="select_all">
                             </th>
                             <th>Name</th>
+                            <th>Link</th>
                             <th style="width: 100px">Order</th>
                             <th style="width: 130px">Show in menu</th>
                             <th style="width: 60px">Delete</th>
@@ -33,6 +34,9 @@
                                         <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'navigation', 'action' => 'edit', 'id' => $item->id)) ?>">
                                             <?php echo $item->name; ?>
                                         </a>
+                                    </td>
+                                    <td>
+                                        <?php echo $item->link; ?>
                                     </td>
                                     <td>
                                         <?php echo is_null($item->order_list) ? '-' : $item->order_list; ?>
@@ -59,6 +63,9 @@
                                                 <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'navigation', 'action' => 'edit', 'id' => $subitem->id)) ?>">
                                                     <?php echo $subitem->name; ?>
                                                 </a>
+                                            </td>
+                                            <td>
+                                                <?php echo $subitem->link; ?>
                                             </td>
                                             <td>
                                                 <?php echo is_null($subitem->order_list) ? '-' : $subitem->order_list; ?>
