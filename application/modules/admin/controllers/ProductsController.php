@@ -3,6 +3,15 @@ require_once 'AbstractAdminController.php';
 
 class Admin_ProductsController extends AbstractAdminController
 {
+    private $_allowedExtensions = array('png', 'bmp', 'jpg', 'jpeg');
+
+    public function init()
+    {
+        parent::init();
+
+
+    }
+
     public function indexAction()
     {
         $this->forward('list');
@@ -23,22 +32,75 @@ class Admin_ProductsController extends AbstractAdminController
         if (!$this->getRequest()->isPost()) {
             return;
         }
-        $adapter = new Zend_File_Transfer_Adapter_Http();
 
+        $this->view->msg = array();
+
+
+        $filters = array(
+            'namw'     => 'StringTrim',
+            'describe' => 'StringTrim',
+            'price' => 'Digits',
+            'quantity' => 'Digits'
+        );
+        $validators = array(
+            'name' => array(
+                'allowEmpty' => false
+            ),
+            'quantity'   => array(
+                'Digits',                // string
+                new Zend_Validate_Int(), // object instance
+                'allowEmpty' => false
+            ),
+            'price'   => array(
+                'Digits',                // string
+                new Zend_Validate_Int(), // object instance
+                'allowEmpty' => false
+            ),
+        );
+
+
+        $input = new Zend_Filter_Input($filters, $validators);
+        $input->setData($this->getRequest()->getPost());
+
+        var_dump($input->isValid());
+
+        $adapter = new Zend_File_Transfer_Adapter_Http();
 
         $adapter->setDestination(UPLOAD_IMAGES_PATH);
 
-        $name = md5($adapter->getFileName());
+        $files  = $adapter->getFileInfo();
+        foreach ($files as $file => $fileInfo) {
 
-        while(file_exists(UPLOAD_IMAGES_PATH.'/'.$name)){
-            $name = md5($name);
+            if($adapter->isUploaded($file)) {
+
+                if($adapter->isValid($file)) {
+                    $ext = $this->_findexts($fileInfo['name']);
+                    if (!in_array($ext, $this->_allowedExtensions)) {
+                        $this->view->msg[] = "nieprawidłowe rozszerszenie";
+                        return;
+                    }
+
+                    $name = md5($fileInfo['name']) . '.' . $ext;
+
+                    while (file_exists(UPLOAD_IMAGES_PATH . '/' . $name)) {
+                        $name = md5($name);
+                    }
+
+                    $adapter->addFilter('Rename', $name, $fileInfo['name']);
+
+                    if (!$adapter->receive($fileInfo['name'])) {
+
+                        $this->view->msg[] = $adapter->getMessages();
+
+                        return;
+
+                    }else{
+                        Application_Model_Images::create(array("name" => $name, "product_id" => $product_id));
+                    }
+                }
+            }
         }
 
-        $adapter->addFilter('Rename', array('target' => UPLOAD_IMAGES_PATH . '/' . $name, 'overwrite' => true));
-        if (!$adapter->receive()) {
-            $messages = $adapter->getMessages();
-            echo implode("\n", $messages);
-        }
     }
 
     protected function _findexts($filename)
