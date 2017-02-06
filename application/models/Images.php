@@ -2,7 +2,7 @@
 
 class Application_Model_Images extends Zend_Db_Table {
 
-    protected $_name = 'images';
+    protected $_name = 'products_images';
 
     public static function create(array $data) {
         $table = new self();
