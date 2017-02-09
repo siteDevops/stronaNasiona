@@ -4,19 +4,19 @@
             <h1>Add</h1>
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" name="name" value="">
+                <input type="text" class="form-control" id="name" name="name" value="<?php echo $this->name ?>">
             </div>
             <div class="form-group">
                 <label for="link">Link</label>
-                <input type="text" class="form-control" id="order" name="link" value="">
+                <input type="text" class="form-control" id="order" name="link" value="<?php echo $this->ilnk ?>">
             </div>
         </div>
         <aside class="right-panel">
             <div class="panel-box">
                 <div class="container-fluid text-center">
-                    <input type="submit" value="&plus;&nbsp;<?php echo $this->translate('Add'); ?>" class="btn btn-block btn-success">
+                    <input type="submit" value="&plus;&nbsp;Dodaj" class="btn btn-block btn-success">
                     <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'navigation', 'action' => 'list')); ?>" class="btn btn-block btn-danger">
-                        <?php echo $this->translate('Cancel'); ?>
+                        Anuluj
                     </a>
                 </div>
             </div>
@@ -26,20 +26,20 @@
                     <div class="form-group">
                         <label for="show_in_menu">Show in menu</label>
                         <select class="form-control" name="show_in_menu" id="show_in_menu">
-                            <option value="1" selected>Show</option>
-                            <option value="0">Hide</option>
+                            <option value="1" <?php if($this->show_in_menu == 1) echo "selected"?>>Show</option>
+                            <option value="0" <?php if($this->show_in_menu == 0) echo "selected"?>>Hide</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="order">Order</label>
-                        <input type="text" class="form-control" id="order" name="order" value="0">
+                        <input type="text" class="form-control" id="order" name="order" value="<?php echo $this->order ?>">
                     </div>
                     <div class="form-group">
                         <label for="parent_id">Parent</label>
                         <select class="form-control" name="parent_id">
                             <option value="0">NONE</option>
                             <?php foreach ($this->parents as $parent): ?>
-                                <option value="<?php echo $parent->id ?>">
+                                <option value="<?php echo $parent->id ?>" <?php if($this->parent_id == $parent->id) echo "selected"?>>
                                     <?php echo $parent->name ?>
                                 </option>
                             <?php endforeach; ?>
