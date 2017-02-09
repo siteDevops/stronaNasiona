@@ -120,3 +120,16 @@ a.user-deleted{
 a.user-banned{
     color:#5e5e5e;
 }
+
+.well.images{
+    display: none;
+}
+.well.images.active{
+    display: block;
+}
+.well.images img{
+    margin: 5px;
+    max-width: 150px;
+    max-height: 150px;
+    cursor: pointer;
+}
