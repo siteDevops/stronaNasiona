@@ -2,8 +2,20 @@
 
 class rtPlugins_View_Helper_Categories extends Zend_View_Helper_Abstract {
 
-    public function Categories() {
-        return self::getCategories(Application_Model_Categories::getList());
+    private $_activeCategory;
+
+    public function Categories($type = "links", $active_category = NULL) {
+        if(!is_null($active_category)){
+            $this->_activeCategory = $active_category;
+        }
+        switch($type) {
+            case 'links':
+                return self::getCategories(Application_Model_Categories::getList());
+                break;
+            case 'select':
+                return self::getCategoriesAsSelectOptions(Application_Model_Categories::getList());
+                break;
+        }
     }
 
     public function getCategories($categories, $parent = 0) {
@@ -29,6 +41,26 @@ class rtPlugins_View_Helper_Categories extends Zend_View_Helper_Abstract {
         return $html;
     }
 
-}
+    public function getCategoriesAsSelectOptions($categories, $parent = 0, $indent="") {
+        $html = '';
+        foreach ($categories as $category) {
+            if ($category->parent_id == $parent) {
+                $subcategories = self::getCategoriesAsSelectOptions(Application_Model_Categories::getList(), $category->id, $indent."&nbsp;&nbsp;");
 
+                $subcatList = empty($subcategories) ? '' : $subcategories;
+
+                $selected = '';
+                if($category->id == $this->_activeCategory){
+                    $selected = 'selected';
+                }
+
+                $html.='<option value="'.$category->id.'" '.$selected.'>'
+                    . $indent.' '.$category->name
+                    . '</option>'
+                    . $subcatList;
+            }
+        }
+        return $html;
+    }
+}
 ?>
