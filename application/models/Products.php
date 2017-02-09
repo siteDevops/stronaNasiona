@@ -20,7 +20,7 @@ class Application_Model_Products extends Zend_Db_Table {
         $select = $table->select()
             ->where('id = ?', $id);
 
-        return $table->fetchRow($select)->toArray();
+        return $table->fetchRow($select);
     }
 
     public static function getList()
