@@ -1,0 +1,104 @@
+<div class="container-fluid">
+    <aside class="top-panel">
+        <div class="panel-box">
+            <div class="btn-group text-center">
+                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'products', 'action' => 'add')); ?>" class="btn btn-success">
+                    <b>&plus;</b>&nbsp;Nowy
+                </a>
+                <button class="btn btn-danger option_for_selected" id="delete_selected" onclick="return confirm('Jesteś pewny?')" disabled>
+                    <i class="fa fa-trash"></i>&nbsp;
+                    Usuń
+                </button>
+            </div>
+        </div>
+    </aside>
+    <div class="container full-container">
+        <?php if ($this->products): ?>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th style="width: 50px">
+                            <input type="checkbox" class="select_all">
+                        </th>
+                        <th>
+                            <a href="<?php echo $this->url(array('controller' => 'products', 'action' => 'list', 'order' => 'name', 'order_type' => $this->order_type == 'asc' ? 'desc' : 'asc')) ?>">
+                                Nazwa
+                            </a>
+                        </th>
+                        <th>
+                            <a href="<?php echo $this->url(array('controller' => 'products', 'action' => 'list', 'order' => 'price', 'order_type' => $this->order_type == 'asc' ? 'desc' : 'asc')) ?>">
+                                Cena
+                            </a>
+                        </th>
+                        <th>
+                            <a href="<?php echo $this->url(array('controller' => 'products', 'action' => 'list', 'order' => 'quantity', 'order_type' => $this->order_type == 'asc' ? 'desc' : 'asc')) ?>">
+                                Ilość
+                            </a>
+                        </th>
+                        <th style="width: 130px">
+                            <a href="<?php echo $this->url(array('controller' => 'products', 'action' => 'list', 'order' => 'date_register', 'order_type' => $this->order_type == 'asc' ? 'desc' : 'asc')) ?>">
+                                Data utworzenia
+                            </a>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($this->products as $item): ?>
+                        <tr data-id="<?php echo $item->id ?>">
+                            <th scope="row">
+                                <input type="checkbox">
+                            </th>
+                            <td>
+                                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'products', 'action' => 'edit', 'id' => $item->id)) ?>">
+                                    <?php echo $item->name; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <?php echo $item->price;?>
+                            </td>
+                            <td>
+                                <?php echo $item->quantity;?>
+                            </td>
+                            <td class="text-center">
+                                <?php echo $item->creation_date; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php else: ?>
+            pusto
+        <?php endif; ?>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('input.select_all').change(function () {
+            var $this = $(this);
+            $('input:checkbox').each(function () {
+                $(this).prop('checked', $this.is(':checked'));
+            });
+        });
+        $('input:checkbox').change(function () {
+            if ($('input:checkbox:checked').length) {
+                $('.option_for_selected').removeAttr('disabled');
+            } else {
+                $('.option_for_selected').attr('disabled', 'disabled');
+            }
+        });
+
+        $('#delete_selected').click(function () {
+            var link = '/admin/products/delete';
+            $('input:checkbox:checked').each(function () {
+                var id = $(this).parents('tr').data('id');
+                if (typeof (id) !== 'undefined') {
+                    link += '/id/' + id;
+                }
+            });
+            window.location.href = link;
+        });
+    });
+</script>
