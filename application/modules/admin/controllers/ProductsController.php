@@ -81,7 +81,47 @@ class Admin_ProductsController extends AbstractAdminController
         $product->category_id = $input->category_id;
 
         $product->save();
+        $adapter = new Zend_File_Transfer_Adapter_Http();
 
+        $adapter->setDestination(UPLOAD_IMAGES_PATH);
+
+        $files  = $adapter->getFileInfo();
+        foreach ($files as $file => $fileInfo) {
+
+            if($adapter->isUploaded($file)) {
+
+                if($adapter->isValid($file)) {
+                    $ext = $this->_findexts($fileInfo['name']);
+                    if (!in_array($ext, $this->_allowedExtensions)) {
+                        $this->view->msg[] = "nieprawidłowe rozszerszenie";
+                        return;
+                    }
+
+                    $name = md5($fileInfo['name']);
+
+                    while (file_exists(UPLOAD_IMAGES_PATH . '/' . $name.'.'.$ext)) {
+                        $name = md5($name);
+                    }
+
+                    $adapter->addFilter('Rename', $name.'.'.$ext, $fileInfo['name']);
+
+                    if (!$adapter->receive($fileInfo['name'])) {
+
+                        $this->view->msg[] = $adapter->getMessages();
+
+                        return;
+
+                    }else{
+                        Application_Model_Images::create(array("name" => $name.'.'.$ext, "product_id" => $product->id));
+                        $im = imagecreatefrompng(UPLOAD_IMAGES_PATH . '/' . $name.'.'.$ext);
+                        $im2 = imagecrop($im, ['x' => 0, 'y' => 0, 'width' => 50, 'height' => 300]);
+                        if ($im2 !== FALSE) {
+                            imagepng($im2, UPLOAD_IMAGES_PATH . '/' . $name.'_22'.'.'.$ext);
+                        }
+                    }
+                }
+            }
+        }
 
         $this->redirect('/admin/products/edit/id/' . $product->id);
     }
@@ -94,7 +134,6 @@ class Admin_ProductsController extends AbstractAdminController
 
         $this->view->msg = array();
 
-
         $input = new Zend_Filter_Input($this->_filters, $this->_validators);
         $input->setData($this->getRequest()->getPost());
 
@@ -104,18 +143,17 @@ class Admin_ProductsController extends AbstractAdminController
         $this->view->quantity    = $input->quantity;
         $this->view->category_id = $input->category_id;
 
-            return;
-            $data = array(
-                'name' => $input->name,
-                'description' => $input->description,
-                'quantity' => $input->quantity,
-                'price' => $input->price,
-                'category_id' => $input->category_id
-            );
+        $data = array(
+            'name' => $input->name,
+            'description' => $input->description,
+            'quantity' => $input->quantity,
+            'price' => $input->price,
+            'category_id' => $input->category_id
+        );
 
-            $product = Application_Model_Products::create($data);
+        $product = Application_Model_Products::create($data);
 
-            $product_id = $product->id;
+        $product_id = $product->id;
 
 
         $adapter = new Zend_File_Transfer_Adapter_Http();
