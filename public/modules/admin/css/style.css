@@ -133,3 +133,9 @@ a.user-banned{
     max-height: 150px;
     cursor: pointer;
 }
+.well.images img.old_image{
+    border: 2px solid #0a6680;
+}
+.well.images img.new_image{
+    border: 2px solid #4cae4c;
+}
