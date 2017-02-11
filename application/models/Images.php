@@ -26,9 +26,9 @@ class Application_Model_Images extends Zend_Db_Table {
 
         $table = new self();
         $select = $table->select()
-            ->where('id = ?', $id);
+            ->where('product_id = ?', $id);
 
-        return $table->fetchRow($select);
+        return $table->fetchAll($select);
     }
 
     public static function getList()
